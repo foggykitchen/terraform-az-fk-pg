@@ -1,0 +1,14 @@
+resource_group_name = "foggykitchen-rg"
+location            = "westeurope"
+name_prefix         = "fk-pg04"
+
+pg_admin_username = "pgadmin"
+pg_admin_password = "REPLACE_WITH_STRONG_PASSWORD"
+
+key_vault_key_name = "postgresql-cmk"
+
+tags = {
+  project     = "foggykitchen"
+  environment = "dev"
+  managed_by  = "opentofu"
+}

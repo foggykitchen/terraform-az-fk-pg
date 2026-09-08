@@ -1,0 +1,15 @@
+resource_group_name = "foggykitchen-rg"
+location            = "westeurope"
+name_prefix         = "fk-pg05"
+
+pg_admin_username = "pgadmin"
+pg_admin_password = "REPLACE_WITH_STRONG_PASSWORD"
+
+log_analytics_retention_in_days = 30
+log_analytics_daily_quota_gb    = -1
+
+tags = {
+  project     = "foggykitchen"
+  environment = "dev"
+  managed_by  = "opentofu"
+}

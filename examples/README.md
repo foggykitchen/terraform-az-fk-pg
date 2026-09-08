@@ -13,6 +13,9 @@ These examples are part of the [FoggyKitchen.com training ecosystem](https://fog
 |:-------:|:------|:-----------|
 | 01 | **Private Access with Delegated Subnet** | PostgreSQL Flexible Server, VNet injection, delegated subnet, Private DNS |
 | 02 | **Private Endpoint** | PostgreSQL Flexible Server, FoggyKitchen Private Endpoint module, Private DNS Zone Group |
+| 03 | **Microsoft Entra Authentication** | PostgreSQL Flexible Server, delegated subnet, FoggyKitchen Entra User, FoggyKitchen Entra Group, group administrator |
+| 04 | **Customer-Managed Key Encryption** | PostgreSQL Flexible Server, delegated subnet, FoggyKitchen Key Vault, FoggyKitchen Key Vault Key, FoggyKitchen Managed Identity, FoggyKitchen RBAC |
+| 05 | **Diagnostic Settings** | PostgreSQL Flexible Server, delegated subnet, Azure Monitor, FoggyKitchen Log Analytics |
 
 ---
 
@@ -37,7 +40,7 @@ tofu apply
 The recommended learning path is sequential:
 
 ```text
-01 -> 02
+01 -> 02 -> 03 -> 04 -> 05
 ```
 
 ---
@@ -58,6 +61,8 @@ The recommended learning path is sequential:
 - [FoggyKitchen Azure Private DNS Module](https://github.com/foggykitchen/terraform-az-fk-private-dns)
 - [FoggyKitchen Azure Private Endpoint Module](https://github.com/foggykitchen/terraform-az-fk-private-endpoint)
 - [FoggyKitchen Azure Compute Module](https://github.com/foggykitchen/terraform-az-fk-compute)
+- [FoggyKitchen Azure Key Vault Module](https://github.com/foggykitchen/terraform-az-fk-key-vault)
+- [FoggyKitchen Azure Key Vault Key Module](https://github.com/foggykitchen/terraform-az-fk-key-vault-key)
 
 ---
 

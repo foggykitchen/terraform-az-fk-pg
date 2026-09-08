@@ -37,6 +37,34 @@ variable "administrator_password" {
   default     = null
 }
 
+variable "entra_authentication" {
+  description = "Optional Microsoft Entra ID authentication settings. When disabled, the authentication block is not rendered."
+  type = object({
+    enabled               = optional(bool, false)
+    password_auth_enabled = optional(bool, true)
+    tenant_id             = optional(string)
+  })
+  default = {}
+}
+
+variable "entra_administrators" {
+  description = "Map of Microsoft Entra ID administrators for PostgreSQL Flexible Server."
+  type = map(object({
+    principal_name = string
+    object_id      = string
+    principal_type = string
+  }))
+  default = {}
+
+  validation {
+    condition = alltrue([
+      for administrator in var.entra_administrators :
+      contains(["User", "Group", "ServicePrincipal"], administrator.principal_type)
+    ])
+    error_message = "entra_administrators principal_type must be one of: User, Group, ServicePrincipal."
+  }
+}
+
 variable "sku_name" {
   description = "PostgreSQL Flexible Server SKU name."
   type        = string
@@ -132,6 +160,33 @@ variable "maintenance_window" {
   }
 }
 
+variable "identity" {
+  description = "Optional managed identity configuration for PostgreSQL Flexible Server."
+  type = object({
+    type          = string
+    identity_ids  = list(string)
+    principal_ids = optional(map(string), {})
+    client_ids    = optional(map(string), {})
+  })
+  default = null
+
+  validation {
+    condition     = var.identity == null || var.identity.type == "UserAssigned"
+    error_message = "identity.type must be UserAssigned when identity is set."
+  }
+}
+
+variable "customer_managed_key" {
+  description = "Optional customer-managed key encryption settings. Null keeps service-managed encryption."
+  type = object({
+    key_vault_key_id                     = string
+    primary_user_assigned_identity_id    = string
+    geo_backup_key_vault_key_id          = optional(string)
+    geo_backup_user_assigned_identity_id = optional(string)
+  })
+  default = null
+}
+
 variable "databases" {
   description = "Map of PostgreSQL databases to create."
   type = map(object({
@@ -154,6 +209,31 @@ variable "configurations" {
   description = "Map of PostgreSQL server parameters."
   type        = map(string)
   default     = {}
+}
+
+variable "diagnostic_settings" {
+  description = "Map of Azure Monitor diagnostic settings for PostgreSQL Flexible Server."
+  type = map(object({
+    name                           = string
+    log_analytics_workspace_id     = optional(string)
+    storage_account_id             = optional(string)
+    eventhub_authorization_rule_id = optional(string)
+    eventhub_name                  = optional(string)
+    log_categories                 = optional(list(string))
+    log_category_groups            = optional(list(string), ["allLogs"])
+    metric_categories              = optional(list(string), ["AllMetrics"])
+  }))
+  default = {}
+
+  validation {
+    condition = alltrue([
+      for setting in values(var.diagnostic_settings) :
+      setting.log_analytics_workspace_id != null ||
+      setting.storage_account_id != null ||
+      setting.eventhub_authorization_rule_id != null
+    ])
+    error_message = "Each diagnostic_settings entry must set at least one destination: log_analytics_workspace_id, storage_account_id, or eventhub_authorization_rule_id."
+  }
 }
 
 variable "tags" {

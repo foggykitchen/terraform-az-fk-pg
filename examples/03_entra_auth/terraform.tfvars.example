@@ -1,0 +1,15 @@
+resource_group_name = "foggykitchen-rg"
+location            = "westeurope"
+name_prefix         = "fk-pg03"
+
+entra_admin_user_principal_name = "fk-pg-admin@REPLACE_WITH_TENANT_DOMAIN"
+entra_admin_user_display_name   = "FoggyKitchen PostgreSQL Admin"
+entra_admin_user_mail_nickname  = "fkpgadmin"
+entra_admin_user_password       = "REPLACE_WITH_STRONG_PASSWORD"
+entra_admin_group_name          = "fk-postgresql-admins"
+
+tags = {
+  project     = "foggykitchen"
+  environment = "dev"
+  managed_by  = "opentofu"
+}
